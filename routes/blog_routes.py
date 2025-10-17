@@ -1,0 +1,57 @@
+from flask import Blueprint, render_template, request, redirect, url_for, abort
+from models.blog import BlogPost, Comment
+from models.base import db
+from forms.blog_form import CreateBlogForm
+from forms.comments import CommentForm
+from datetime import datetime
+from flask_login import login_required, current_user
+from functools import wraps
+
+
+def admin_only(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not current_user.is_authenticated or current_user.id != 1:
+            return abort(403)
+        return f(*args, **kwargs)
+    return decorated_function
+
+blog_bp = Blueprint("blog", __name__, url_prefix="/blog")
+
+@blog_bp.route("/create", methods=["GET", "POST"])
+@admin_only
+@login_required
+def create_blog():
+    form = CreateBlogForm()
+    if form.validate_on_submit():
+        new_post = BlogPost(
+            title=form.title.data,
+            subtitle=form.subtitle.data,
+            date=datetime.now().strftime("%B %d, %Y"),
+            body=form.body.data,
+            author=form.author.data,
+            img_url=form.img_url.data,
+        )
+        db.session.add(new_post)
+        db.session.commit()
+        return redirect(url_for("main.homepage"))
+    return render_template("create.html", form=form)
+
+
+@blog_bp.route("/blog", methods=["GET", "POST"])
+@login_required
+def get_blog():
+    blog_id = request.args.get("id")
+    blog = db.get_or_404(BlogPost, blog_id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        new_comment = Comment(
+            name=current_user.name,
+            date=datetime.now().strftime("%B %d, %Y"),
+            text=form.text.data,
+            post_id=blog.id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect(url_for("blog.get_blog", id=blog.id))
+    return render_template("blog.html", blog=blog, form=form, current_user=current_user)

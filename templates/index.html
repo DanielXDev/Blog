@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Blog Platform</title>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Navbar -->
+    {% include "navbar.html" %}
+
+    <!-- Landing Page Header with Background Image -->
+    {% if blogs.page == 1 %}
+    <header class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-center text-white" style="background-image: url('https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg');">
+        <div class="bg-black bg-opacity-50 p-6 sm:p-8 md:p-10 rounded-lg max-w-2xl mx-4">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold">Stay Ahead with Our Blog</h1>
+            <p class="mt-3 sm:mt-4 text-base sm:text-lg">Explore the latest insights in technology, development, and innovation with expert perspectives.</p>
+            <a href="#blogs" class="mt-4 sm:mt-6 inline-block bg-indigo-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-indigo-700 transition">Start Reading</a>
+        </div>
+    </header>
+    {% endif %}
+
+
+    <!-- Latest Blogs Header -->
+    <section id="blogs" class="py-6 sm:py-8 md:py-10 text-center {% if not blogs.page == 1 %}pt-20 sm:pt-24{% endif %}">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 px-4">Latest Blogs</h2>
+    </section>
+
+    <!-- Blog Section -->
+<section class="py-6 sm:py-8 md:py-10 px-4">
+    <div class="container mx-auto grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+        {% for blog in blogs.items %}
+            <div class="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden w-full">
+                <!-- Image -->
+                <div class="h-40 sm:h-44 md:h-48 w-full">
+                    <img src="{{ blog.img_url }}" alt="{{ blog.title }}" class="w-full h-full object-cover">
+                </div>
+
+                <!-- Content -->
+                <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
+                    <div class="space-y-1.5 sm:space-y-2">
+                        <p class="text-xs font-semibold text-indigo-600 uppercase">{{ blog.topic }}</p>
+                        <a href="{{ url_for('blog.get_blog', id=blog.id) }}" class="block text-base sm:text-lg font-semibold text-gray-900 hover:text-indigo-600 transition duration-300">
+                            {{ blog.title }}
+                        </a>
+                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3">
+                            {{ blog.body|striptags }}
+                        </p>
+                    </div>
+
+                    <!-- Author Info -->
+                    <div class="flex items-center gap-2.5 sm:gap-3 mt-3 sm:mt-4 border-t pt-2.5 sm:pt-3">
+                        <img src="https://bucket.material-tailwind.com/magic-ai/6b1c5941d417a2a32baee89c2f3d1975d7d4fb81e486ed43dc1082ac54b0658b.jpg" alt="Author" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover flex-shrink-0">
+                        <div class="text-xs sm:text-sm min-w-0">
+                            <p class="font-semibold text-gray-900 truncate">{{ blog.author }}</p>
+                            <p class="text-gray-600 truncate">Published on {{ blog.date }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Pagination -->
+    <div class="container mx-auto mt-6 sm:mt-8 px-4">
+        <div class="flex items-center justify-between gap-4">
+            <!-- Previous button -->
+            {% if blogs.has_prev %}
+                <a href="{{ url_for('main.homepage', page=blogs.prev_num) }}"
+                   class="px-3 sm:px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm sm:text-base">
+                    ← Previous
+                </a>
+            {% else %}
+                <div class="px-3 sm:px-4 py-2 text-gray-400 cursor-not-allowed text-sm sm:text-base">
+                    ← Previous
+                </div>
+            {% endif %}
+
+            <!-- Next button -->
+            {% if blogs.has_next %}
+                <a href="{{ url_for('main.homepage', page=blogs.next_num) }}"
+                   class="px-3 sm:px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm sm:text-base">
+                    Next →
+                </a>
+            {% else %}
+                <div class="px-3 sm:px-4 py-2 text-gray-400 cursor-not-allowed text-sm sm:text-base">
+                    Next →
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+    <!-- Subscription Section -->
+    <section class="bg-gray-200 py-8 sm:py-10 text-center px-4">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Subscribe to Our Newsletter</h2>
+        <p class="text-gray-700 mt-2 text-sm sm:text-base">Get the latest updates delivered to your inbox.</p>
+        <form class="mt-4 flex flex-col sm:flex-row justify-center gap-2 sm:gap-0 max-w-xl mx-auto">
+            <input type="email" class="w-full sm:w-2/3 p-3 border rounded-lg sm:rounded-l-lg sm:rounded-r-none text-sm sm:text-base" placeholder="Enter your email" required>
+            <button type="submit" class="w-full sm:w-auto bg-indigo-600 text-white px-5 py-3 rounded-lg sm:rounded-l-none sm:rounded-r-lg font-semibold hover:bg-indigo-700 transition text-sm sm:text-base">Subscribe</button>
+        </form>
+    </section>
+
+   <!-- Footer -->
+    {% include "footer.html" %}
+
+</body>
+</html>

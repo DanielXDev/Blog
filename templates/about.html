@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>About Us</title>
+    <meta name="description" content="Learn more about BlogSite, our mission, and our team.">
+</head>
+<body class="bg-gray-100">
+    
+    <!-- Navbar -->
+    {% include "navbar.html" %}
+
+    <!-- Hero Section -->
+    <header class="relative w-full h-[500px] bg-cover bg-center flex items-center justify-center text-center text-white" style="background-image: url('https://images.pexels.com/photos/374720/pexels-photo-374720.jpeg');">
+        <div class="bg-black bg-opacity-50 p-10 rounded-lg max-w-3xl">
+            <h1 class="text-5xl font-extrabold">About Us</h1>
+            <p class="mt-4 text-lg">Discover our mission, our story, and the people behind BlogSite.</p>
+        </div>
+    </header>
+    
+    <!-- About Content -->
+    <main class="container mx-auto py-12 px-6 max-w-4xl">
+        <h2 class="text-3xl font-bold text-gray-900 text-center">Our Mission</h2>
+        <p class="text-lg text-gray-700 leading-relaxed mt-4 text-center">
+            At BlogSite, we are passionate about sharing knowledge, inspiring ideas, and fostering a community of thinkers and creators. Our mission is to bring high-quality, insightful content to readers worldwide.
+        </p>
+        
+        <!-- Team Section -->
+        <div class="mt-12">
+            <h2 class="text-3xl font-bold text-gray-900 text-center">Meet Our Team</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
+                    <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg" class="w-32 h-32 rounded-full mx-auto object-cover" alt="Founder">
+                    <h3 class="text-xl font-semibold text-gray-900 mt-4">Olayemi Daniel</h3>
+                    <p class="text-gray-600">Founder & CEO</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
+                    <img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg" class="w-32 h-32 rounded-full mx-auto object-cover" alt="Editor">
+                    <h3 class="text-xl font-semibold text-gray-900 mt-4">Jane Smith</h3>
+                    <p class="text-gray-600">Editor-in-Chief</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
+                    <img src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg" class="w-32 h-32 rounded-full mx-auto object-cover" alt="Writer">
+                    <h3 class="text-xl font-semibold text-gray-900 mt-4">Michael Lee</h3>
+                    <p class="text-gray-600">Lead Writer</p>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    {% include "footer.html" %}
+    
+</body>
+</html>
