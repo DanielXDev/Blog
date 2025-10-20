@@ -82,6 +82,7 @@
         .line-clamp-3 {
             display: -webkit-box;
             -webkit-line-clamp: 3;
+            line-clamp: 3;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
@@ -154,7 +155,7 @@
         <div class="container mx-auto max-w-7xl">
             <div class="grid gap-6 sm:gap-7 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
                 {% for blog in blogs.items %}
-                <article class="blog-card scroll-reveal flex flex-col bg-white rounded-2xl shadow-md overflow-hidden group" style="transition-delay: {{ loop.index0 * 0.1 }}s;">
+                <article class="blog-card scroll-reveal flex flex-col bg-white rounded-2xl shadow-md overflow-hidden group" data-delay="{{ (loop.index0 * 0.1) | round(2) }}">
                     <!-- Image Container -->
                     <div class="relative h-48 sm:h-52 md:h-56 w-full overflow-hidden">
                         <img src="{{ blog.img_url }}" 
@@ -328,7 +329,15 @@
             });
         }, observerOptions);
         
-        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        // Set transition-delay from data-delay attribute (to avoid template braces in inline CSS) and observe
+        document.querySelectorAll('.scroll-reveal').forEach(el => {
+            const delayVal = el.dataset.delay;
+            if (delayVal) {
+                // if numeric like "0.1" append 's', otherwise use value as-is (e.g. "200ms" or "0.1s")
+                el.style.transitionDelay = isNaN(Number(delayVal)) ? delayVal : `${delayVal}s`;
+            }
+            observer.observe(el);
+        });
         
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
