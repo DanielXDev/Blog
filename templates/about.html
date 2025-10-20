@@ -4,54 +4,391 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
-    <title>About Us</title>
+    <title>About Us - BlogSite</title>
     <meta name="description" content="Learn more about BlogSite, our mission, and our team.">
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .gradient-bg {
+            background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        }
+        
+        .parallax-section {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stat-number {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50 text-gray-900">
     
     <!-- Navbar -->
     {% include "navbar.html" %}
 
-    <!-- Hero Section -->
-    <header class="relative w-full h-[500px] bg-cover bg-center flex items-center justify-center text-center text-white" style="background-image: url('https://images.pexels.com/photos/374720/pexels-photo-374720.jpeg');">
-        <div class="bg-black bg-opacity-50 p-10 rounded-lg max-w-3xl">
-            <h1 class="text-5xl font-extrabold">About Us</h1>
-            <p class="mt-4 text-lg">Discover our mission, our story, and the people behind BlogSite.</p>
+    <!-- Hero Section with Parallax -->
+    <header class="relative w-full h-screen flex items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 gradient-bg"></div>
+        <div class="absolute inset-0 bg-black opacity-40"></div>
+        
+        <!-- Animated Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-20 left-20 w-72 h-72 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <div class="relative z-10 text-center text-white px-6 max-w-5xl animate-fade-in-up">
+            <div class="inline-block mb-4 px-4 py-2 glass-effect rounded-full text-sm font-medium">
+                🚀 Crafting Stories That Matter
+            </div>
+            <h1 class="text-6xl md:text-7xl font-bold mb-6 leading-tight">
+                We're More Than<br/>
+                <span class="text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-purple-200">Just a Blog</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto leading-relaxed">
+                A community-driven platform where ideas flourish, knowledge is shared, and meaningful conversations begin.
+            </p>
+            <div class="mt-10 flex flex-wrap gap-4 justify-center">
+                <a href="#mission" class="px-8 py-4 bg-white text-gray-900 rounded-full font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg">
+                    Our Story
+                </a>
+                <a href="#team" class="px-8 py-4 glass-effect text-white rounded-full font-semibold hover:bg-white hover:bg-opacity-20 transition-all transform hover:scale-105">
+                    Meet the Team
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
         </div>
     </header>
     
-    <!-- About Content -->
-    <main class="container mx-auto py-12 px-6 max-w-4xl">
-        <h2 class="text-3xl font-bold text-gray-900 text-center">Our Mission</h2>
-        <p class="text-lg text-gray-700 leading-relaxed mt-4 text-center">
-            At BlogSite, we are passionate about sharing knowledge, inspiring ideas, and fostering a community of thinkers and creators. Our mission is to bring high-quality, insightful content to readers worldwide.
-        </p>
-        
-        <!-- Team Section -->
-        <div class="mt-12">
-            <h2 class="text-3xl font-bold text-gray-900 text-center">Meet Our Team</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-6">
-                <div class="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
-                    <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg" class="w-32 h-32 rounded-full mx-auto object-cover" alt="Founder">
-                    <h3 class="text-xl font-semibold text-gray-900 mt-4">Olayemi Daniel</h3>
-                    <p class="text-gray-600">Founder & CEO</p>
+    <!-- Stats Section -->
+    <section class="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto">
+                <div class="text-center scroll-reveal">
+                    <div class="text-5xl font-bold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400 stat-number">500+</div>
+                    <div class="mt-2 text-gray-300">Articles Published</div>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
-                    <img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg" class="w-32 h-32 rounded-full mx-auto object-cover" alt="Editor">
-                    <h3 class="text-xl font-semibold text-gray-900 mt-4">Jane Smith</h3>
-                    <p class="text-gray-600">Editor-in-Chief</p>
+                <div class="text-center scroll-reveal" style="transition-delay: 0.1s;">
+                    <div class="text-5xl font-bold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400 stat-number">50K+</div>
+                    <div class="mt-2 text-gray-300">Monthly Readers</div>
                 </div>
-                <div class="bg-white p-6 rounded-lg shadow-md text-center transform transition duration-300 hover:scale-105">
-                    <img src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg" class="w-32 h-32 rounded-full mx-auto object-cover" alt="Writer">
-                    <h3 class="text-xl font-semibold text-gray-900 mt-4">Michael Lee</h3>
-                    <p class="text-gray-600">Lead Writer</p>
+                <div class="text-center scroll-reveal" style="transition-delay: 0.2s;">
+                    <div class="text-5xl font-bold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-pink-400 to-red-400 stat-number">100+</div>
+                    <div class="mt-2 text-gray-300">Contributors</div>
+                </div>
+                <div class="text-center scroll-reveal" style="transition-delay: 0.3s;">
+                    <div class="text-5xl font-bold text-gradient bg-clip-text text-transparent bg-gradient-to-r from-red-400 to-orange-400 stat-number">15+</div>
+                    <div class="mt-2 text-gray-300">Countries Reached</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Mission Section -->
+    <main id="mission" class="container mx-auto py-24 px-6 max-w-6xl">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div class="scroll-reveal">
+                <div class="inline-block mb-4 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold">
+                    Our Mission
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 leading-tight mb-6">
+                    Empowering Voices, One Story at a Time
+                </h2>
+                <p class="text-lg text-gray-600 leading-relaxed mb-6">
+                    BlogSite was founded with a simple yet powerful vision: to create a space where ideas transcend boundaries and knowledge becomes accessible to everyone. We believe in the transformative power of storytelling and the importance of diverse perspectives.
+                </p>
+                <p class="text-lg text-gray-600 leading-relaxed mb-8">
+                    Our platform brings together thinkers, creators, and innovators from around the world, fostering meaningful conversations that inspire change and drive progress.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Quality Content</h3>
+                            <p class="text-gray-600">Curated insights from industry experts</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0 w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="font-semibold text-gray-900">Community First</h3>
+                            <p class="text-gray-600">Building connections that matter</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-reveal" style="transition-delay: 0.2s;">
+                <div class="relative">
+                    <div class="absolute -top-6 -left-6 w-72 h-72 bg-purple-300 rounded-3xl opacity-20 blur-3xl"></div>
+                    <img src="https://images.pexels.com/photos/374720/pexels-photo-374720.jpeg" 
+                         class="relative rounded-3xl shadow-2xl w-full h-[500px] object-cover"
+                         alt="Our workspace">
+                    <div class="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-xl p-6 max-w-xs">
+                        <div class="flex items-center gap-3 mb-2">
+                            <div class="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                            <span class="font-semibold text-gray-900">Active Now</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">Join thousands of readers discovering fresh perspectives daily</p>
+                    </div>
                 </div>
             </div>
         </div>
     </main>
     
+    <!-- Values Section -->
+    <section class="py-24 bg-gray-100">
+        <div class="container mx-auto px-6 max-w-6xl">
+            <div class="text-center mb-16 scroll-reveal">
+                <div class="inline-block mb-4 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold">
+                    Our Values
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">What Drives Us Forward</h2>
+                <p class="text-xl text-gray-600 max-w-2xl mx-auto">The principles that guide everything we do</p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-8 card-hover scroll-reveal">
+                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Innovation</h3>
+                    <p class="text-gray-600 leading-relaxed">Constantly pushing boundaries and exploring new ways to deliver value to our community.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 card-hover scroll-reveal" style="transition-delay: 0.1s;">
+                    <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Integrity</h3>
+                    <p class="text-gray-600 leading-relaxed">Upholding the highest standards of honesty, accuracy, and ethical journalism in every piece.</p>
+                </div>
+                
+                <div class="bg-white rounded-2xl p-8 card-hover scroll-reveal" style="transition-delay: 0.2s;">
+                    <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-pink-600 rounded-2xl flex items-center justify-center mb-6">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Inclusivity</h3>
+                    <p class="text-gray-600 leading-relaxed">Celebrating diverse voices and perspectives that enrich our global conversation.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section id="team" class="py-24 container mx-auto px-6 max-w-6xl">
+        <div class="text-center mb-16 scroll-reveal">
+            <div class="inline-block mb-4 px-4 py-2 bg-purple-100 text-purple-700 rounded-full text-sm font-semibold">
+                Our Team
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">The Minds Behind BlogSite</h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">Passionate individuals dedicated to bringing you exceptional content</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="group scroll-reveal">
+                <div class="relative overflow-hidden rounded-3xl bg-white card-hover">
+                    <div class="aspect-square overflow-hidden">
+                        <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg" 
+                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
+                             alt="Olayemi Daniel">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Olayemi Daniel</h3>
+                        <p class="text-purple-600 font-semibold mb-3">Founder & CEO</p>
+                        <p class="text-gray-600 leading-relaxed mb-4">Visionary leader with 10+ years in digital media, passionate about democratizing knowledge.</p>
+                        <div class="flex gap-3">
+                            <a href="#" class="w-10 h-10 bg-gray-100 hover:bg-purple-600 hover:text-white rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path></svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-100 hover:bg-purple-600 hover:text-white rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path><circle cx="4" cy="4" r="2"></circle></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="group scroll-reveal" style="transition-delay: 0.1s;">
+                <div class="relative overflow-hidden rounded-3xl bg-white card-hover">
+                    <div class="aspect-square overflow-hidden">
+                        <img src="https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg" 
+                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
+                             alt="Jane Smith">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Jane Smith</h3>
+                        <p class="text-blue-600 font-semibold mb-3">Editor-in-Chief</p>
+                        <p class="text-gray-600 leading-relaxed mb-4">Award-winning editor ensuring every story meets the highest standards of excellence.</p>
+                        <div class="flex gap-3">
+                            <a href="#" class="w-10 h-10 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path></svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path><circle cx="4" cy="4" r="2"></circle></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="group scroll-reveal" style="transition-delay: 0.2s;">
+                <div class="relative overflow-hidden rounded-3xl bg-white card-hover">
+                    <div class="aspect-square overflow-hidden">
+                        <img src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg" 
+                             class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" 
+                             alt="Michael Lee">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    <div class="p-8">
+                        <h3 class="text-2xl font-bold text-gray-900 mb-1">Michael Lee</h3>
+                        <p class="text-pink-600 font-semibold mb-3">Lead Writer</p>
+                        <p class="text-gray-600 leading-relaxed mb-4">Storyteller extraordinaire crafting compelling narratives that resonate and inspire.</p>
+                        <div class="flex gap-3">
+                            <a href="#" class="w-10 h-10 bg-gray-100 hover:bg-pink-600 hover:text-white rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path></svg>
+                            </a>
+                            <a href="#" class="w-10 h-10 bg-gray-100 hover:bg-pink-600 hover:text-white rounded-full flex items-center justify-center transition-colors">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"></path><circle cx="4" cy="4" r="2"></circle></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-24 bg-gradient-to-br from-purple-600 via-purple-700 to-blue-600 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <div class="max-w-3xl mx-auto scroll-reveal">
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Join Our Growing Community</h2>
+                <p class="text-xl text-purple-100 mb-10">Be part of a movement that's shaping the future of digital storytelling</p>
+                <div class="flex flex-wrap gap-4 justify-center">
+                    <a href="#" class="px-8 py-4 bg-white text-purple-700 rounded-full font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-xl">
+                        Start Reading
+                    </a>
+                    <a href="#" class="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-purple-700 transition-all transform hover:scale-105">
+                        Become a Contributor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
     <!-- Footer -->
     {% include "footer.html" %}
+    
+    <script>
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
     
 </body>
 </html>

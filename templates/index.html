@@ -5,106 +5,342 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Blog Platform</title>
+    <style>
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .gradient-overlay {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.6) 0%, rgba(139, 92, 246, 0.5) 100%);
+        }
+        
+        .blog-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.15);
+        }
+        
+        .blog-card img {
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-card:hover img {
+            transform: scale(1.1);
+        }
+        
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .scroll-reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .topic-badge {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .topic-badge::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .blog-card:hover .topic-badge::before {
+            left: 100%;
+        }
+        
+        .line-clamp-3 {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-50">
 
     <!-- Navbar -->
     {% include "navbar.html" %}
 
-    <!-- Landing Page Header with Background Image -->
+    <!-- Hero Header - Only on First Page -->
     {% if blogs.page == 1 %}
-    <header class="relative w-full h-screen bg-cover bg-center flex items-center justify-center text-center text-white" style="background-image: url('https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg');">
-        <div class="bg-black bg-opacity-50 p-6 sm:p-8 md:p-10 rounded-lg max-w-2xl mx-4">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold">Stay Ahead with Our Blog</h1>
-            <p class="mt-3 sm:mt-4 text-base sm:text-lg">Explore the latest insights in technology, development, and innovation with expert perspectives.</p>
-            <a href="#blogs" class="mt-4 sm:mt-6 inline-block bg-indigo-600 text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-md text-base sm:text-lg font-semibold hover:bg-indigo-700 transition">Start Reading</a>
+    <header class="relative w-full h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image with Overlay -->
+        <div class="absolute inset-0">
+            <img src="https://images.pexels.com/photos/3184328/pexels-photo-3184328.jpeg" 
+                 alt="Blog Hero" 
+                 class="w-full h-full object-cover">
+            <div class="absolute inset-0 gradient-overlay"></div>
+        </div>
+        
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-20 left-20 w-72 h-72 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-20 right-20 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl animate-pulse" style="animation-delay: 2s;"></div>
+        </div>
+        
+        <!-- Hero Content -->
+        <div class="relative z-10 text-center text-white px-4 max-w-4xl mx-auto animate-fade-in-up">
+            <div class="inline-block mb-6 px-4 py-2 bg-white bg-opacity-20 backdrop-blur-sm rounded-full text-sm font-medium border border-white border-opacity-30">
+                ✨ Your Gateway to Knowledge
+            </div>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+                Stay Ahead with<br/>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-200 to-purple-200">Our Blog</span>
+            </h1>
+            <p class="text-lg sm:text-xl md:text-2xl text-gray-100 mb-8 max-w-2xl mx-auto leading-relaxed">
+                Explore the latest insights in technology, development, and innovation with expert perspectives.
+            </p>
+            <a href="#blogs" class="inline-flex items-center gap-2 bg-white text-indigo-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl">
+                Start Reading
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+            </a>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
         </div>
     </header>
     {% endif %}
 
-
     <!-- Latest Blogs Header -->
-    <section id="blogs" class="py-6 sm:py-8 md:py-10 text-center {% if not blogs.page == 1 %}pt-20 sm:pt-24{% endif %}">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 px-4">Latest Blogs</h2>
+    <section id="blogs" class="py-12 sm:py-16 md:py-20 text-center {% if not blogs.page == 1 %}pt-24 sm:pt-28 md:pt-32{% endif %}">
+        <div class="container mx-auto px-4">
+            <div class="inline-block mb-4 px-4 py-2 bg-indigo-100 text-indigo-700 rounded-full text-sm font-semibold">
+                📚 Featured Articles
+            </div>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-4">Latest Blogs</h2>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover fresh perspectives and in-depth analysis from our community of writers</p>
+        </div>
     </section>
 
-    <!-- Blog Section -->
-<section class="py-6 sm:py-8 md:py-10 px-4">
-    <div class="container mx-auto grid gap-4 sm:gap-5 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-        {% for blog in blogs.items %}
-            <div class="flex flex-col bg-white rounded-2xl shadow-lg overflow-hidden w-full">
-                <!-- Image -->
-                <div class="h-40 sm:h-44 md:h-48 w-full">
-                    <img src="{{ blog.img_url }}" alt="{{ blog.title }}" class="w-full h-full object-cover">
-                </div>
-
-                <!-- Content -->
-                <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
-                    <div class="space-y-1.5 sm:space-y-2">
-                        <p class="text-xs font-semibold text-indigo-600 uppercase">{{ blog.topic }}</p>
-                        <a href="{{ url_for('blog.get_blog', title=blog.title) }}" class="block text-base sm:text-lg font-semibold text-gray-900 hover:text-indigo-600 transition duration-300">
-                            {{ blog.title }}
-                        </a>
-                        <p class="text-gray-600 text-xs sm:text-sm line-clamp-3">
-                            {{ blog.body|striptags }}
-                        </p>
+    <!-- Blog Grid Section -->
+    <section class="py-6 sm:py-8 md:py-12 px-4">
+        <div class="container mx-auto max-w-7xl">
+            <div class="grid gap-6 sm:gap-7 md:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+                {% for blog in blogs.items %}
+                <article class="blog-card scroll-reveal flex flex-col bg-white rounded-2xl shadow-md overflow-hidden group" style="transition-delay: {{ loop.index0 * 0.1 }}s;">
+                    <!-- Image Container -->
+                    <div class="relative h-48 sm:h-52 md:h-56 w-full overflow-hidden">
+                        <img src="{{ blog.img_url }}" 
+                             alt="{{ blog.title }}" 
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-60 transition-opacity duration-300"></div>
                     </div>
 
-                    <!-- Author Info -->
-                    <div class="flex items-center gap-2.5 sm:gap-3 mt-3 sm:mt-4 border-t pt-2.5 sm:pt-3">
-                        <img src="https://bucket.material-tailwind.com/magic-ai/6b1c5941d417a2a32baee89c2f3d1975d7d4fb81e486ed43dc1082ac54b0658b.jpg" alt="Author" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover flex-shrink-0">
-                        <div class="text-xs sm:text-sm min-w-0">
-                            <p class="font-semibold text-gray-900 truncate">{{ blog.author }}</p>
-                            <p class="text-gray-600 truncate">Published on {{ blog.date }}</p>
+                    <!-- Content Container -->
+                    <div class="p-5 sm:p-6 flex flex-col justify-between flex-grow">
+                        <div class="space-y-3">
+                            <!-- Topic Badge -->
+                            <span class="topic-badge inline-block px-3 py-1 text-xs font-bold text-indigo-700 bg-indigo-50 rounded-full uppercase tracking-wide">
+                                {{ blog.topic }}
+                            </span>
+                            
+                            <!-- Title -->
+                            <a href="{{ url_for('blog.get_blog', title=blog.title) }}" 
+                               class="block group">
+                                <h3 class="text-xl sm:text-2xl font-bold text-gray-900 group-hover:text-indigo-600 transition-colors duration-300 leading-tight">
+                                    {{ blog.title }}
+                                </h3>
+                            </a>
+                            
+                            <!-- Excerpt -->
+                            <p class="text-gray-600 text-sm sm:text-base leading-relaxed line-clamp-3">
+                                {{ blog.body|striptags }}
+                            </p>
+                        </div>
+
+                        <!-- Author Section -->
+                        <div class="flex items-center gap-3 mt-5 pt-4 border-t border-gray-100">
+                            <img src="https://bucket.material-tailwind.com/magic-ai/6b1c5941d417a2a32baee89c2f3d1975d7d4fb81e486ed43dc1082ac54b0658b.jpg" 
+                                 alt="{{ blog.author }}" 
+                                 class="w-10 h-10 rounded-full object-cover ring-2 ring-gray-100 flex-shrink-0">
+                            <div class="flex-1 min-w-0">
+                                <p class="font-semibold text-gray-900 text-sm truncate">{{ blog.author }}</p>
+                                <div class="flex items-center gap-2 text-xs text-gray-500">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    <span class="truncate">{{ blog.date }}</span>
+                                </div>
+                            </div>
+                            <a href="{{ url_for('blog.get_blog', title=blog.title) }}" 
+                               class="flex-shrink-0 w-8 h-8 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition-colors duration-300">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
+                            </a>
                         </div>
                     </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- Enhanced Pagination -->
+            <div class="mt-12 sm:mt-16">
+                <div class="flex items-center justify-center gap-3">
+                    <!-- Previous Button -->
+                    {% if blogs.has_prev %}
+                        <a href="{{ url_for('main.homepage', page=blogs.prev_num) }}"
+                           class="flex items-center gap-2 px-5 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full hover:border-indigo-600 hover:text-indigo-600 transition-all transform hover:scale-105 shadow-sm font-medium">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Previous</span>
+                        </a>
+                    {% else %}
+                        <div class="flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-400 rounded-full cursor-not-allowed">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                            </svg>
+                            <span class="hidden sm:inline">Previous</span>
+                        </div>
+                    {% endif %}
+
+                    <!-- Page Indicator -->
+                    <div class="px-5 py-3 bg-indigo-600 text-white rounded-full font-semibold shadow-md">
+                        Page {{ blogs.page }}
+                    </div>
+
+                    <!-- Next Button -->
+                    {% if blogs.has_next %}
+                        <a href="{{ url_for('main.homepage', page=blogs.next_num) }}"
+                           class="flex items-center gap-2 px-5 py-3 bg-white border-2 border-gray-200 text-gray-700 rounded-full hover:border-indigo-600 hover:text-indigo-600 transition-all transform hover:scale-105 shadow-sm font-medium">
+                            <span class="hidden sm:inline">Next</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </a>
+                    {% else %}
+                        <div class="flex items-center gap-2 px-5 py-3 bg-gray-100 text-gray-400 rounded-full cursor-not-allowed">
+                            <span class="hidden sm:inline">Next</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
-        {% endfor %}
-    </div>
-
-    <!-- Pagination -->
-    <div class="container mx-auto mt-6 sm:mt-8 px-4">
-        <div class="flex items-center justify-between gap-4">
-            <!-- Previous button -->
-            {% if blogs.has_prev %}
-                <a href="{{ url_for('main.homepage', page=blogs.prev_num) }}"
-                   class="px-3 sm:px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm sm:text-base">
-                    ← Previous
-                </a>
-            {% else %}
-                <div class="px-3 sm:px-4 py-2 text-gray-400 cursor-not-allowed text-sm sm:text-base">
-                    ← Previous
-                </div>
-            {% endif %}
-
-            <!-- Next button -->
-            {% if blogs.has_next %}
-                <a href="{{ url_for('main.homepage', page=blogs.next_num) }}"
-                   class="px-3 sm:px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors text-sm sm:text-base">
-                    Next →
-                </a>
-            {% else %}
-                <div class="px-3 sm:px-4 py-2 text-gray-400 cursor-not-allowed text-sm sm:text-base">
-                    Next →
-                </div>
-            {% endif %}
         </div>
-    </div>
-</section>
-
-    <!-- Subscription Section -->
-    <section class="bg-gray-200 py-8 sm:py-10 text-center px-4">
-        <h2 class="text-xl sm:text-2xl font-bold text-gray-900">Subscribe to Our Newsletter</h2>
-        <p class="text-gray-700 mt-2 text-sm sm:text-base">Get the latest updates delivered to your inbox.</p>
-        <form class="mt-4 flex flex-col sm:flex-row justify-center gap-2 sm:gap-0 max-w-xl mx-auto">
-            <input type="email" class="w-full sm:w-2/3 p-3 border rounded-lg sm:rounded-l-lg sm:rounded-r-none text-sm sm:text-base" placeholder="Enter your email" required>
-            <button type="submit" class="w-full sm:w-auto bg-indigo-600 text-white px-5 py-3 rounded-lg sm:rounded-l-none sm:rounded-r-lg font-semibold hover:bg-indigo-700 transition text-sm sm:text-base">Subscribe</button>
-        </form>
     </section>
 
-   <!-- Footer -->
+    <!-- Newsletter Section -->
+    <section class="relative py-16 sm:py-20 md:py-24 overflow-hidden">
+        <!-- Background Gradient -->
+        <div class="absolute inset-0 bg-gradient-to-br from-indigo-600 via-purple-600 to-indigo-700"></div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl"></div>
+            <div class="absolute bottom-0 right-1/4 w-96 h-96 bg-white rounded-full mix-blend-overlay filter blur-3xl"></div>
+        </div>
+        
+        <div class="relative container mx-auto px-4 text-center">
+            <div class="max-w-3xl mx-auto">
+                <div class="inline-block mb-4 px-4 py-2 bg-white bg-opacity-20 backdrop-blur-sm rounded-full text-sm font-semibold text-white border border-white border-opacity-30">
+                    📬 Stay Connected
+                </div>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4">
+                    Subscribe to Our Newsletter
+                </h2>
+                <p class="text-lg sm:text-xl text-indigo-100 mb-8">
+                    Get the latest updates, insights, and exclusive content delivered directly to your inbox.
+                </p>
+                
+                <form class="mt-8 flex flex-col sm:flex-row gap-3 sm:gap-0 max-w-xl mx-auto">
+                    <div class="relative flex-1">
+                        <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.207"></path>
+                            </svg>
+                        </div>
+                        <input type="email" 
+                               class="w-full pl-12 pr-4 py-4 border-2 border-transparent rounded-full sm:rounded-l-full sm:rounded-r-none text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent shadow-lg" 
+                               placeholder="Enter your email address" 
+                               required>
+                    </div>
+                    <button type="submit" 
+                            class="bg-gray-900 text-white px-8 py-4 rounded-full sm:rounded-l-none sm:rounded-r-full font-semibold hover:bg-gray-800 transition-all transform hover:scale-105 shadow-xl flex items-center justify-center gap-2">
+                        Subscribe
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                        </svg>
+                    </button>
+                </form>
+                
+                <p class="mt-4 text-sm text-indigo-200">
+                    🔒 We respect your privacy. Unsubscribe at any time.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
     {% include "footer.html" %}
+    
+    <script>
+        // Scroll reveal animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
