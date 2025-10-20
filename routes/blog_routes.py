@@ -1,4 +1,3 @@
-from turtle import title
 from flask import Blueprint, render_template, request, redirect, url_for, abort
 from models.blog import BlogPost, Comment
 from models.base import db
