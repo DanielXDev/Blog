@@ -42,7 +42,7 @@
                 <div class="p-4 sm:p-5 flex flex-col justify-between flex-grow">
                     <div class="space-y-1.5 sm:space-y-2">
                         <p class="text-xs font-semibold text-indigo-600 uppercase">{{ blog.topic }}</p>
-                        <a href="{{ url_for('blog.get_blog', id=blog.id) }}" class="block text-base sm:text-lg font-semibold text-gray-900 hover:text-indigo-600 transition duration-300">
+                        <a href="{{ url_for('blog.get_blog', title=blog.title) }}" class="block text-base sm:text-lg font-semibold text-gray-900 hover:text-indigo-600 transition duration-300">
                             {{ blog.title }}
                         </a>
                         <p class="text-gray-600 text-xs sm:text-sm line-clamp-3">

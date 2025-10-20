@@ -1,3 +1,4 @@
+from turtle import title
 from flask import Blueprint, render_template, request, redirect, url_for, abort
 from models.blog import BlogPost, Comment
 from models.base import db
@@ -38,11 +39,10 @@ def create_blog():
     return render_template("create.html", form=form)
 
 
-@blog_bp.route("/blog", methods=["GET", "POST"])
+@blog_bp.route("/blog/<title>", methods=["GET", "POST"])
 @login_required
-def get_blog():
-    blog_id = request.args.get("id")
-    blog = db.get_or_404(BlogPost, blog_id)
+def get_blog(title):
+    blog = BlogPost.query.filter_by(title=title).first_or_404()
     form = CommentForm()
     if form.validate_on_submit():
         new_comment = Comment(
